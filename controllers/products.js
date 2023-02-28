@@ -1,6 +1,7 @@
 const path = require('path')
 const express = require('express')
-const products = []
+
+const Product = require('../models/product')
 
 const rootDir = require('../util/path')
 exports.getAddProduct = ('/add-product',(req,res,next)=>{
@@ -10,8 +11,11 @@ exports.getAddProduct = ('/add-product',(req,res,next)=>{
 })
 
 exports.postAddProduct = ('/add-product',(req,res,next)=>{
-    products.push({ title: req.body.title });
-    console.log(products)
+    // products.push({ title: req.body.title });
+    // console.log(products)
+    const product = new Product(req.body.title)
+    product.save();
+    console.log(product)
     res.redirect('/')
 })
 
@@ -19,8 +23,11 @@ exports.getContactus = ('/contact-us',(req,res,next)=>{
     res.sendFile(path.join(rootDir,'views','contact-us.html'))
 })
 exports.postContactus = ('/contact-us',(req,res,next)=>{
-    products.push({ title: req.body.title });
-    console.log(products)
+    // products.push({ title: req.body.title });
+    // console.log(products)
+    const product = new Product(req.body.title)
+    product.save();
+    console.log(product)
     res.redirect('/success')
 })
 
@@ -32,4 +39,8 @@ exports.shop = ('/',(req,res,next)=>{
     // res.setHeader('content-type', 'text/html')
     // res.set({'content-type': 'text/html'})
     res.sendFile(path.join(rootDir,'views','shop.html'))
+    const products = Product.fetchAll((products)=>{
+        console.log(products)
+    });
+    
 })
